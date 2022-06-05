@@ -1,24 +1,32 @@
 package studio.wksjason.dagger2pratice
 
-class UserRepository(
+import dagger.Component
+import javax.inject.Inject
+
+@Component
+interface UserRepositoryComponent {
+    fun getUserRepository() : UserRepository
+}
+
+class UserRepository @Inject constructor(
     val userLocalDataSource: UserLocalDataSource,
     val userRemoteDataSource: UserRemoteDataSource
 ) {
 
 }
 
-class UserLocalDataSource(val userDatabase: UserDatabase) {
+class UserLocalDataSource @Inject constructor(val userDatabase: UserDatabase) {
 
 }
 
-class UserRemoteDataSource(val userApiService: UserApiService) {
+class UserRemoteDataSource @Inject constructor(val userApiService: UserApiService) {
 
 }
 
-class UserApiService() {
+class UserApiService @Inject constructor() {
 
 }
 
-class UserDatabase() {
+class UserDatabase @Inject constructor() {
 
 }

@@ -11,10 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val userApiService = UserApiService()
-        val userDatabase = UserDatabase()
-        val userRemoteDataSource = UserRemoteDataSource(userApiService)
-        val userLocalDataSource = UserLocalDataSource(userDatabase)
-        userRepository = UserRepository(userLocalDataSource, userRemoteDataSource)
+        userRepository = DaggerUserRepositoryComponent.create()
+            .getUserRepository()
     }
 }
