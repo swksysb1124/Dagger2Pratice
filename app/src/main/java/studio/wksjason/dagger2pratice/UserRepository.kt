@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 @Component
 interface UserRepositoryComponent {
-    fun getUserRepository() : UserRepository
+    fun inject(activity: MainActivity)
 }
 
 class UserRepository @Inject constructor(
