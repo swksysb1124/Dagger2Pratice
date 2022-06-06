@@ -1,16 +1,26 @@
 package studio.wksjason.dagger2pratice
 
-import dagger.Binds
-import dagger.Component
-import dagger.Module
-import dagger.Provides
+import dagger.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [UserRemoteDataSourceModule::class, UserLocalDataSourceModule::class])
+@Component(modules = [UserLocalDataSourceModule::class])
+interface ApplicationComponent {
+    fun userRepositoryComponent(): UserRepositoryComponent.Factory
+}
+
+@ActivityScope
+@Subcomponent(modules = [UserRemoteDataSourceModule::class])
 interface UserRepositoryComponent {
     fun inject(activity: MainActivity)
+
+    fun provideUserRepository(): UserRepository
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): UserRepositoryComponent
+    }
 }
 
 class UserRepository @Inject constructor(
@@ -23,7 +33,7 @@ class UserRepository @Inject constructor(
 @Module
 abstract class UserRemoteDataSourceModule {
 
-    @Singleton
+    @ActivityScope
     @Binds
     abstract fun provideUserApiService(advancedUserSelfDefinedApiService: AdvancedUserSelfDefinedApiService): UserApiService
 }

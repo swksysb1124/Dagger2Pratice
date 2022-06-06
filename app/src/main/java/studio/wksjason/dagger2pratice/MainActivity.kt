@@ -13,10 +13,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var userRepository2: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DaggerUserRepositoryComponent.create().inject(this)
+        val baseComponent = DaggerApplicationComponent.create()
+        val userRepositoryComponent = baseComponent.userRepositoryComponent().create()
+        userRepositoryComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        println("user repository equals? ${userRepository === userRepository2}")
+        println(
+            "user api service instance equals? " +
+                    "${
+                        userRepository.userRemoteDataSource.userApiService ===
+                                userRepository2.userRemoteDataSource.userApiService
+                    }"
+        )
     }
 }
