@@ -12,13 +12,15 @@ interface ApplicationComponent {
     fun provideUseDatabase(): UserDatabase
 }
 
-@ActivityScope
+@ViewModelScope
 @Component(
     dependencies = [ApplicationComponent::class],
     modules = [UserRemoteDataSourceModule::class]
 )
 interface UserRepositoryComponent {
     fun inject(activity: MainActivity)
+
+    fun inject(mainViewModel: MainViewModel)
 
     fun provideUserRepository(): UserRepository
 
@@ -28,6 +30,7 @@ interface UserRepositoryComponent {
     }
 }
 
+@ViewModelScope
 class UserRepository @Inject constructor(
     val userLocalDataSource: UserLocalDataSource,
     val userRemoteDataSource: UserRemoteDataSource
@@ -38,7 +41,6 @@ class UserRepository @Inject constructor(
 @Module
 abstract class UserRemoteDataSourceModule {
 
-    @ActivityScope
     @Binds
     abstract fun provideUserApiService(advancedUserSelfDefinedApiService: AdvancedUserSelfDefinedApiService): UserApiService
 }
