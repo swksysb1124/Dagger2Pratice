@@ -7,19 +7,22 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [UserLocalDataSourceModule::class])
 interface ApplicationComponent {
-    fun userRepositoryComponent(): UserRepositoryComponent.Factory
+    fun provideUseDatabase(): UserDatabase
 }
 
 @ActivityScope
-@Subcomponent(modules = [UserRemoteDataSourceModule::class])
+@Component(
+    dependencies = [ApplicationComponent::class],
+    modules = [UserRemoteDataSourceModule::class]
+)
 interface UserRepositoryComponent {
     fun inject(activity: MainActivity)
 
     fun provideUserRepository(): UserRepository
 
-    @Subcomponent.Factory
+    @Component.Factory
     interface Factory {
-        fun create(): UserRepositoryComponent
+        fun create(component: ApplicationComponent): UserRepositoryComponent
     }
 }
 
