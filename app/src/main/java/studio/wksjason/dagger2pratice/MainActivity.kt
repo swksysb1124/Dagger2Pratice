@@ -14,9 +14,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var userRepository2: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val baseComponent = DaggerApplicationComponent.create()
+        val applicationComponent = DaggerApplicationComponent.builder()
+            .contextModule(ContextModule(applicationContext))
+            .build()
         val userRepositoryComponent = DaggerUserRepositoryComponent.factory()
-            .create(baseComponent)
+            .create(applicationComponent)
         userRepositoryComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -1,11 +1,13 @@
 package studio.wksjason.dagger2pratice
 
+import android.content.Context
 import dagger.*
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [UserLocalDataSourceModule::class])
+@Component(modules = [UserLocalDataSourceModule::class, ContextModule::class])
 interface ApplicationComponent {
     fun provideUseDatabase(): UserDatabase
 }
@@ -46,10 +48,11 @@ class UserLocalDataSourceModule {
 
     @Singleton
     @Provides
-    fun provideUser3rdPartyDatabase(): UserDatabase = User3rdPartyDatabase.Builder()
-        .name("user database")
-        .size(1000)
-        .build()
+    fun provideUser3rdPartyDatabase(context: Context): UserDatabase =
+        User3rdPartyDatabase.Builder(context)
+            .name("user database")
+            .size(1000)
+            .build()
 }
 
 
@@ -107,7 +110,7 @@ class User3rdPartyDatabase(builder: Builder) : UserDatabase {
         this.size = builder.size
     }
 
-    class Builder {
+    class Builder(ctx: Context) {
         var name: String? = null
             private set
         var size: Int? = null
@@ -116,6 +119,15 @@ class User3rdPartyDatabase(builder: Builder) : UserDatabase {
         fun name(name: String) = apply { this.name = name }
         fun size(size: Int) = apply { this.size = size }
         fun build() = User3rdPartyDatabase(this)
+    }
+}
+
+@Module
+class ContextModule(private val context: Context) {
+
+    @Provides
+    fun getContext(): Context {
+        return context
     }
 }
 
