@@ -5,7 +5,9 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 @Component(modules = [UserRemoteDataSourceModule::class, UserLocalDataSourceModule::class])
 interface UserRepositoryComponent {
     fun inject(activity: MainActivity)
@@ -21,6 +23,7 @@ class UserRepository @Inject constructor(
 @Module
 abstract class UserRemoteDataSourceModule {
 
+    @Singleton
     @Binds
     abstract fun provideUserApiService(advancedUserSelfDefinedApiService: AdvancedUserSelfDefinedApiService): UserApiService
 }
@@ -28,6 +31,7 @@ abstract class UserRemoteDataSourceModule {
 @Module
 class UserLocalDataSourceModule {
 
+    @Singleton
     @Provides
     fun provideUser3rdPartyDatabase(): UserDatabase = User3rdPartyDatabase.Builder()
         .name("user database")
