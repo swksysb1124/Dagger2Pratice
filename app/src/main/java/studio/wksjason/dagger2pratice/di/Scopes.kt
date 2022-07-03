@@ -1,4 +1,4 @@
-package studio.wksjason.dagger2pratice
+package studio.wksjason.dagger2pratice.di
 
 import javax.inject.Scope
 
